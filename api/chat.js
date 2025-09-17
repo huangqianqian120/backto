@@ -12,10 +12,10 @@ global.chatData = global.chatData || {
   userCleanupInterval: null
 };
 
-// Clean up inactive users (older than 30 seconds)
+// Clean up inactive users (older than 24 hours)
 function cleanupInactiveUsers() {
   const now = Date.now();
-  const timeout = 30000; // 30 seconds
+  const timeout = 24 * 60 * 60 * 1000; // 24 hours
   
   for (const [username, userData] of global.chatData.users.entries()) {
     if (now - userData.lastSeen > timeout) {
@@ -41,7 +41,7 @@ function cleanupInactiveUsers() {
 
 // Start cleanup interval if not already running
 if (!global.chatData.userCleanupInterval) {
-  global.chatData.userCleanupInterval = setInterval(cleanupInactiveUsers, 10000); // Every 10 seconds
+  global.chatData.userCleanupInterval = setInterval(cleanupInactiveUsers, 60 * 60 * 1000); // Every hour
 }
 
 const corsOptions = {

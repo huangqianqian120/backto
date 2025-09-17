@@ -41,6 +41,54 @@ const VintageChat = () => {
     }
   }, []);
 
+  // 处理组件卸载时的离开逻辑
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (connectionStatus === 'connected' && username) {
+        // 使用 navigator.sendBeacon 确保在页面卸载时能发送请求
+        const leaveData = JSON.stringify({
+          type: 'leave',
+          username
+        });
+        navigator.sendBeacon('/api/chat', leaveData);
+      }
+    };
+
+    const handleUnload = () => {
+      if (connectionStatus === 'connected' && username) {
+        const leaveData = JSON.stringify({
+          type: 'leave',
+          username
+        });
+        navigator.sendBeacon('/api/chat', leaveData);
+      }
+    };
+
+    // 监听页面卸载事件
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
+
+    // 组件卸载时的清理函数
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
+      
+      // 组件卸载时发送离开请求
+      if (connectionStatus === 'connected' && username) {
+        fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'leave',
+            username
+          })
+        }).catch(console.error);
+      }
+    };
+  }, [connectionStatus, username]);
+
   // 获取用户IP地址（简化版本）
   const getUserIP = () => {
     // 在实际应用中，你可能需要调用外部API来获取真实IP
