@@ -255,7 +255,12 @@ const VintageChat = () => {
       id: Date.now(),
       sender: '我',
       content: message,
-      timestamp: new Date().toLocaleTimeString(),
+      timestamp: new Date().toLocaleString('zh-CN', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit',
+        hour12: false 
+      }),
       isUser: true
     };
 
@@ -296,7 +301,12 @@ const VintageChat = () => {
         id: Date.now() + 1,
         sender: 'Yuna',
         content: data.choices[0].message.content,
-        timestamp: new Date().toLocaleTimeString(),
+        timestamp: new Date().toLocaleString('zh-CN', { 
+          hour: '2-digit', 
+          minute: '2-digit', 
+          second: '2-digit',
+          hour12: false 
+        }),
         isUser: false
       };
 
@@ -307,7 +317,12 @@ const VintageChat = () => {
         id: Date.now() + 1,
         sender: 'Yuna',
         content: '抱歉，我现在无法回复你的消息。请检查网络连接或API配置。',
-        timestamp: new Date().toLocaleTimeString(),
+        timestamp: new Date().toLocaleString('zh-CN', { 
+          hour: '2-digit', 
+          minute: '2-digit', 
+          second: '2-digit',
+          hour12: false 
+        }),
         isUser: false
       };
       setYunaMessages(prev => [...prev, errorMessage]);
@@ -359,7 +374,12 @@ const VintageChat = () => {
           id: Date.now(),
           sender: username,
           content: messageToSend,
-          timestamp: new Date().toLocaleTimeString(),
+          timestamp: new Date().toLocaleString('zh-CN', { 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: false 
+          }),
           isUser: true
         };
         setChatroomMessages(prev => [...prev, userMessage]);
@@ -527,36 +547,50 @@ const VintageChat = () => {
 
         {/* 消息区域 */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {currentMessages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex items-start space-x-2 ${
-                message.isUser ? 'justify-end' : 'justify-start'
-              }`}
-            >
-              <div
-                className={`max-w-xs lg:max-w-md px-3 py-2 rounded-lg shadow-md ${
-                  message.isUser
-                    ? activeTab === 'yuna'
-                      ? 'bg-blue-500 text-white rounded-br-none'
-                      : 'bg-blue-500 text-white rounded-br-none'
-                    : message.isSystem
-                    ? 'bg-yellow-100 text-gray-700 border border-yellow-300 rounded-lg'
-                    : 'bg-white text-gray-800 rounded-bl-none border border-gray-300'
-                }`}
-              >
-                <div className="font-pixel-sm font-bold mb-1">
-                  {message.sender}
-                </div>
-                <div className="font-pixel-md whitespace-pre-wrap">
-                  {message.content}
-                </div>
-                <div className="font-pixel-sm opacity-70 mt-1">
-                  {message.timestamp}
+          {currentMessages.map((message) => {
+            // 判断是否为当前用户的消息
+            const isCurrentUser = activeTab === 'yuna' 
+              ? message.sender === '你' || message.sender === '我'
+              : message.sender === username;
+            
+            return (
+               <div
+                 key={message.id}
+                 className={`flex items-start space-x-2 ${
+                   isCurrentUser ? 'justify-end' : 
+                   message.isSystem ? 'justify-center' : 'justify-start'
+                 }`}
+               >
+                <div
+                   className={`max-w-xs lg:max-w-md px-3 py-2 rounded-lg shadow-md ${
+                     isCurrentUser
+                       ? 'bg-blue-500 text-white rounded-br-none border-2 border-blue-600'
+                       : message.isSystem
+                       ? 'bg-yellow-50 text-yellow-800 border-2 border-yellow-300 rounded-lg mx-auto'
+                       : 'bg-gray-50 text-gray-800 rounded-bl-none border-2 border-gray-300'
+                   }`}
+                 >
+                  {!message.isSystem && (
+                     <div className={`font-pixel-sm font-bold mb-1 ${
+                       isCurrentUser ? 'text-blue-100' : 'text-gray-600'
+                     }`}>
+                       {message.sender}
+                     </div>
+                   )}
+                   <div className="font-pixel-md whitespace-pre-wrap">
+                     {message.content}
+                   </div>
+                   <div className={`font-pixel-sm mt-1 text-right ${
+                     isCurrentUser ? 'text-blue-200 opacity-80' : 
+                     message.isSystem ? 'text-yellow-600 opacity-70 text-center' :
+                     'text-gray-500 opacity-70'
+                   }`}>
+                     {message.timestamp}
+                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           
           {isLoading && activeTab === 'yuna' && (
             <div className="flex items-start justify-start">
