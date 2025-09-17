@@ -1,0 +1,49 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 复古像素背景 - 90年代风格 -->
+  <defs>
+    <!-- 定义复古渐变 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="800" height="600" fill="url(#bgGradient)" />
+
+  <!-- 像素网格 - 创造复古显示器效果 -->
+  <g opacity="0.1">
+    <pattern id="pixelGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="none" stroke="#ffffff" stroke-width="0.5" />
+    </pattern>
+    <rect width="800" height="600" fill="url(#pixelGrid)" />
+  </g>
+
+  <!-- 复古噪点效果 -->
+  <filter id="noise" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" result="noise" />
+    <feColorMatrix in="noise" type="saturate" values="0" />
+    <feComponentTransfer>
+      <feFuncA type="discrete" tableValues="0 0.1 0.2" />
+    </feComponentTransfer>
+  </filter>
+  <rect width="800" height="600" filter="url(#noise)" opacity="0.3" />
+
+  <!-- 复古几何图案 - 90年代风格元素 -->
+  <g opacity="0.7">
+    <!-- 左侧波浪线 -->
+    <path d="M0,150 Q100,100 200,150 T400,150 T600,150 T800,150" fill="none" stroke="#ff4ecd" stroke-width="4" />
+    <path d="M0,200 Q100,150 200,200 T400,200 T600,200 T800,200" fill="none" stroke="#00f0ff" stroke-width="3" />
+
+    <!-- 右侧圆形图案 -->
+    <circle cx="700" cy="100" r="40" fill="none" stroke="#ffdd00" stroke-width="3" />
+    <circle cx="700" cy="100" r="20" fill="none" stroke="#ffdd00" stroke-width="2" />
+
+    <!-- 底部渐变条纹 -->
+    <rect x="0" y="500" width="800" height="20" fill="#ff4ecd" opacity="0.5" />
+    <rect x="0" y="520" width="800" height="20" fill="#00f0ff" opacity="0.5" />
+    <rect x="0" y="540" width="800" height="20" fill="#ffdd00" opacity="0.5" />
+    <rect x="0" y="560" width="800" height="20" fill="#00ff66" opacity="0.5" />
+    <rect x="0" y="580" width="800" height="20" fill="#ff6600" opacity="0.5" />
+  </g>
+</svg>
